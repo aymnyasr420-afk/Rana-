@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>رسالة لرانا 🤍</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ink:#4b4139;
+  --ink-soft:#8c8075;
+  --rose-deep:#c99b8a;
+}
+
+*{box-sizing:border-box;}
+html,body{height:100%;}
+
+body{
+  margin:0;
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:34px 18px;
+  font-family:'Tajawal',system-ui,-apple-system,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(1200px 800px at 12% 8%, #fffdfa 0%, rgba(255,253,250,0) 60%),
+    radial-gradient(900px 700px at 88% 18%, #f5eee3 0%, rgba(245,238,227,0) 65%),
+    linear-gradient(160deg,#faf6f0 0%, #f1e9df 48%, #e9f0e8 100%);
+  overflow-x:hidden;
+  position:relative;
+}
+
+.blob{position:fixed;border-radius:50%;filter:blur(80px);opacity:.55;pointer-events:none;z-index:0;}
+.b1{width:420px;height:420px;background:#ecd0c1;top:-130px;right:-110px;}
+.b2{width:390px;height:390px;background:#c8d8c4;bottom:-150px;left:-130px;}
+.b3{width:280px;height:280px;background:#e8dcc0;top:42%;left:46%;}
+
+.content{
+  position:relative;z-index:2;
+  width:min(620px,100%);
+  text-align:center;
+  animation:appear .9s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes appear{
+  from{opacity:0;transform:translateY(22px) scale(.985);}
+  to{opacity:1;transform:none;}
+}
+
+/* ===== منطقة الفيديو (مجهزة للفيديو الشفاف) ===== */
+.video-stage{
+  position:relative;
+  width:100%;
+  height:250px;
+  margin-bottom:20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* مساحة إضافية عشان الفيديو الشفاف يبان كويس */
+}
+
+.hero-video{
+  width: 100%;
+  height: 100%;
+  
+  /* contain بيضمن إن الفيديو كله يبان وميتقطعش، وميتأثرش بأي خلفيات */
+  object-fit: contain; 
+  
+  /* شيلنا الـ blend-mode والـ mask عشان الفيديو الشفاف يظهر بشفافيته الطبيعية */
+  background: transparent;
+}
+
+.question{
+  font-family:'Amiri',serif;
+  font-size:clamp(24px,4.2vw,33px);
+  font-weight:700;
+  line-height:1.5;
+  margin:0 0 10px;
+  color:#4a3f36;
+}
+.sub{
+  margin:0 0 28px;
+  font-size:15px;
+  font-weight:400;
+  color:var(--ink-soft);
+}
+
+.actions{
+  display:flex;
+  gap:14px;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  min-height:56px;
+}
+.btn{
+  font-family:inherit;
+  font-size:17px;
+  font-weight:500;
+  letter-spacing:.3px;
+  padding:14px 44px;
+  border-radius:999px;
+  border:1px solid transparent;
+  cursor:pointer;
+  outline:none;
+  transition:box-shadow .28s ease, background .28s ease;
+}
+.btn-yes{
+  color:#fff;
+  background:linear-gradient(135deg,#dcb9a5,#c99b8a);
+  box-shadow:0 14px 28px -14px rgba(201,155,138,.95);
+}
+.btn-yes:hover{box-shadow:0 20px 36px -16px rgba(201,155,138,1);}
+
+.btn-no{
+  color:var(--ink-soft);
+  background:rgba(255,255,255,.72);
+  border-color:rgba(120,105,90,.18);
+  box-shadow:0 10px 22px -16px rgba(90,75,60,.6);
+}
+.btn-no:hover{background:#fff;}
+
+.btn-yes.running{
+  position:fixed;
+  z-index:80;
+  margin:0;
+  will-change:left, top;
+  box-shadow:0 22px 44px -18px rgba(201,155,138,.95);
+}
+
+.hint{
+  min-height:24px;
+  margin:18px 0 0;
+  font-size:13.5px;
+  color:var(--ink-soft);
+  opacity:0;
+  transition:opacity .45s ease;
+}
+.hint.show{opacity:1;}
+
+.overlay{
+  position:fixed;inset:0;z-index:120;
+  display:grid;place-items:center;
+  padding:24px;
+  background:rgba(72,60,50,.30);
+  -webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(12px);
+  opacity:0;visibility:hidden;
+  transition:opacity .5s ease, visibility .5s;
+}
+.overlay.open{opacity:1;visibility:visible;}
+
+.modal{
+  position:relative;
+  width:min(500px,100%);
+  max-height:90vh;
+  display:flex;
+  flex-direction:column;
+  padding:38px 30px 30px;
+  text-align:center;
+  border-radius:30px;
+  background:linear-gradient(165deg,#fffdfb 0%,#f8f1e8 100%);
+  border:1px solid rgba(255,255,255,.95);
+  box-shadow:0 46px 90px -34px rgba(70,55,45,.55);
+  transform:translateY(22px) scale(.96);
+  transition:transform .55s cubic-bezier(.22,1,.36,1);
+  overflow:hidden;
+}
+.overlay.open .modal{transform:none;}
+
+.modal::before{
+  content:"";
+  position:absolute;inset:-40% -20% auto -20%;
+  height:220px;
+  background:radial-gradient(circle,#f3d9ca 0%,rgba(243,217,202,0) 70%);
+  opacity:.85;pointer-events:none;
+}
+
+.modal h2{
+  position:relative;
+  font-family:'Amiri',serif;
+  font-size:clamp(22px,4vw,28px);
+  font-weight:700;
+  margin:0 0 18px;
+  color:#4a3f36;
+  flex-shrink:0;
+}
+
+.msg{
+  position:relative;
+  max-height:52vh;
+  overflow-y:auto;
+  padding:0 6px 0 12px;
+  margin-bottom:24px;
+  text-align:right;
+  scrollbar-width:thin;
+  scrollbar-color:#dcb9a5 transparent;
+}
+.msg::-webkit-scrollbar{width:6px;}
+.msg::-webkit-scrollbar-thumb{background:#e2c4b5;border-radius:99px;}
+.msg::-webkit-scrollbar-track{background:transparent;}
+
+.msg p{
+  margin:0 0 15px;
+  font-size:15.5px;
+  line-height:2;
+  color:#6b5f55;
+}
+.msg p:last-child{margin-bottom:0;}
+
+.modal .btn{
+  position:relative;
+  flex-shrink:0;
+  padding:13px 46px;
+  align-self:center;
+}
+
+@media (max-width:520px){
+  .video-stage{height:200px;}
+  .btn{padding:13px 34px;font-size:16px;}
+  .modal{padding:30px 20px 24px;border-radius:26px;}
+  .msg{max-height:55vh;}
+  .msg p{font-size:14.5px;line-height:1.95;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="blob b1"></div>
+<div class="blob b2"></div>
+<div class="blob b3"></div>
+
+<main class="content">
+
+  <!-- ═══════════════════════════════════════════════
+       حط اسم الفيديو بتاعك هنا مكان "myvideo.webm"
+       تأكد إنه .webm أو .mov عشان الشفافية تشتغل
+  ═════════════════════════════════════════════════ -->
+  <div class="video-stage">
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="yassr.webm" type="video/webm">
+      <!-- لو عندك نسخة .mov للآيفون ممكن تضيفها هنا كاحتياطي -->
+      <!-- <source src="myvideo.mov" type="video/quicktime"> -->
+    </video>
+  </div>
+
+  <h1 class="question">هل تقبل أن أطمّن قلبك؟</h1>
+  <p class="sub">سؤال صغير… وإجابة واحدة بس هتفرق 🤍</p>
+
+  <div class="actions" id="actions">
+    <button class="btn btn-yes" id="yesBtn">Yes</button>
+    <button class="btn btn-no" id="noBtn">No</button>
+  </div>
+
+  <p class="hint" id="hint"></p>
+</main>
+
+<div class="overlay" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <h2 id="modalTitle">رسالة لرانا 🤍</h2>
+
+    <div class="msg">
+      <p>بصي يا رانا، يمكن أنا معرفكيش أوي، ويمكن إحنا لسه غرب عن بعض، بس والله أنا مبحبش أشوف حد زعلان أو فاقد شغفه بالحياة، خصوصًا لما أحس إن الشخص ده محتاج حد يقف جنبه ويسمعه.</p>
+      <p>أنا مش جاي أقولك إني هحل كل مشاكلك، ولا إني عارف إنتِ بتمري بإيه، بس حابب أقولك إنك متستهونيش بنفسك ولا تسيبي الحزن يطفي النور اللي جواكي. مهما كانت الدنيا تقيلة عليكي دلوقتي، فده مش معناه إنها هتفضل كده على طول.</p>
+      <p>واعتبري إن ليكي أخ، حتى لو معرفتنا لسه بسيطة، لو احتجتي تتكلمي أو تفضفضي في أي وقت، هتلاقيني موجود على قد ما أقدر. مش لازم تبقي قوية طول الوقت، ومش لازم تضحكي وإنتِ من جواكي تعبانة، ومن حقك تزعلي وتاخدي وقتك، بس متنسيش نفسك وسط كل ده.</p>
+      <p>أنا مش عايز منك حاجة، كل اللي أتمناه إنك ترجعي تبتسمي من قلبك، وتلاقي شغفك من تاني، وتعرفي إنك تستاهلي أيام أحسن من الأيام اللي وجعاكي دلوقتي.</p>
+      <p>خلي بالك من نفسك يا رانا، ومتخليش فترة صعبة في حياتك تنسيكي إن لسه فيه حاجات حلوة مستنياكي. يمكن أنا معرفكيش قوي، بس يكفيني إني مش حابب أشوفك زعلانة، وبتمنى من قلبي إن ربنا يجبر بخاطرك، ويريّح قلبك، ويعوّضك عن كل حاجة وجعتك، ويكتبلك فرحة تنسيكي كل الحزن اللي عشتيه. ❤️</p>
+    </div>
+
+    <button class="btn btn-yes" id="closeBtn">تمام</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<script>
+/* ========== منطق الأزرار مع GSAP ========== */
+const yesBtn     = document.getElementById('yesBtn');
+const noBtn      = document.getElementById('noBtn');
+const actions    = document.getElementById('actions');
+const hint       = document.getElementById('hint');
+const overlay    = document.getElementById('overlay');
+const closeBtn   = document.getElementById('closeBtn');
+const videoStage = document.querySelector('.video-stage');
+
+const MAX_MOVES = 5;
+let moves = 0;
+
+const hints = [
+  'الزر بيهرب… جرّب تاني 🤍',
+  'لسه بيهرب… كمّل 😄',
+  'قربنا… كمّل',
+  'آخر مرة وهيوافق',
+  'خلاص… استنى ثانية 🤍'
+];
+
+/* اختيار مكان آمن: بعيد عن الفيديو وعن زر No */
+function getSafePosition() {
+  const pad = 20;
+  const w = yesBtn.offsetWidth;
+  const h = yesBtn.offsetHeight;
+
+  const v = videoStage.getBoundingClientRect();
+  const n = noBtn.getBoundingClientRect();
+
+  const videoZone = {
+    left:   v.left   - pad,
+    right:  v.right  + pad,
+    top:    v.top    - pad,
+    bottom: v.bottom + pad
+  };
+  const noZone = {
+    left:   n.left   - pad,
+    right:  n.right  + pad,
+    top:    n.top    - pad,
+    bottom: n.bottom + pad
+  };
+
+  const maxX = Math.max(pad, window.innerWidth  - w - pad);
+  const maxY = Math.max(pad, window.innerHeight - h - pad);
+
+  const overlaps = (box, zone) => !(
+    box.right  < zone.left  ||
+    box.left   > zone.right ||
+    box.bottom < zone.top   ||
+    box.top    > zone.bottom
+  );
+
+  for (let i = 0; i < 80; i++) {
+    const x = pad + Math.random() * (maxX - pad);
+    const y = pad + Math.random() * (maxY - pad);
+    const btnBox = { left: x, right: x + w, top: y, bottom: y + h };
+
+    if (!overlaps(btnBox, videoZone) && !overlaps(btnBox, noZone)) {
+      return { x, y };
+    }
+  }
+
+  return {
+    x: Math.max(pad, Math.min(maxX, window.innerWidth - w - pad)),
+    y: Math.max(pad, Math.min(maxY, v.bottom + 40))
+  };
+}
+
+function makeFixed() {
+  if (yesBtn.classList.contains('running')) return;
+  const r = yesBtn.getBoundingClientRect();
+  yesBtn.classList.add('running');
+  yesBtn.style.left = r.left + 'px';
+  yesBtn.style.top  = r.top  + 'px';
+  document.body.appendChild(yesBtn);
+}
+
+/* حركة انزلاق ناعمة بدون اهتزاز */
+function animateYes() {
+  const pos = getSafePosition();
+  gsap.killTweensOf(yesBtn);
+
+  gsap.to(yesBtn, {
+    left: pos.x,
+    top:  pos.y,
+    duration: 1.15,
+    ease: 'power2.inOut'
+  });
+}
+
+function openModal() {
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  gsap.fromTo('.modal', { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' });
+}
+
+function closeModal() {
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+
+  gsap.killTweensOf(yesBtn);
+  gsap.killTweensOf(noBtn);
+
+  yesBtn.classList.remove('running');
+  yesBtn.style.left = '';
+  yesBtn.style.top  = '';
+  gsap.set(yesBtn, { clearProps: 'transform' });
+  gsap.set(noBtn,  { clearProps: 'transform' });
+  actions.insertBefore(yesBtn, actions.firstChild);
+
+  moves = 0;
+  hint.classList.remove('show');
+  hint.textContent = '';
+
+  gsap.fromTo([yesBtn, noBtn],
+    { y: 8, opacity: 0.5 },
+    { y: 0, opacity: 1, duration: 0.6, ease: 'power2.out', stagger: 0.06 }
+  );
+}
+
+/* كليك Yes */
+yesBtn.addEventListener('click', () => {
+  if (moves >= MAX_MOVES) return;
+
+  makeFixed();
+  animateYes();
+
+  moves++;
+  hint.textContent = hints[moves - 1];
+  hint.classList.add('show');
+
+  if (moves === MAX_MOVES) {
+    setTimeout(openModal, 1350);
+  }
+});
+
+/* كليك No: انزلاق ناعم بدل الاهتزاز */
+noBtn.addEventListener('click', () => {
+  gsap.killTweensOf(noBtn);
+
+  gsap.to(noBtn, {
+    x: -34,
+    duration: 0.55,
+    ease: 'power2.inOut',
+    onComplete: () => {
+      gsap.to(noBtn, { x: 0, duration: 0.7, ease: 'power2.inOut' });
+    }
+  });
+
+  hint.textContent = 'خلّيها Yes… أهدى كده 🤍';
+  hint.classList.add('show');
+});
+
+closeBtn.addEventListener('click', closeModal);
+overlay.addEventListener('click', (e) => {
+  if (e.target === overlay) closeModal();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+});
+</script>
+
+</body>
+</html>
